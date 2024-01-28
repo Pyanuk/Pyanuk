@@ -1,39 +1,47 @@
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class Proktoz {
     public static void main(String[] args) {
+        System.out.println("Привет в программу под название ^Проверка возраста^ ");
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Привет дорогой пользователь");
-        System.out.println("Введите ваше имя: ");
-        String name = scanner.nextLine();
-        System.out.println("Введите вашу дату рождения (формат: дд.мм.гггг): ");
-        String birthDateInput = scanner.next();
-        LocalDate birthDate = LocalDate.parse(birthDateInput, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        User user = new User(name, birthDate);
-        user.display();
-    }
-}
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-class User {
-    String name;
-    LocalDate birthDate;
-    User(String name, LocalDate birthDate) {
-        this.name = name;
-        this.birthDate = birthDate;
-    }
+        while (true) {
+            System.out.println("\n1. Создать пользователя");
+            System.out.println("2. Персональные данные");
+            System.out.println("3. Проверка возраста");
+            System.out.println("4. Выход");
+            System.out.print("Выберите опцию: ");
+            int option = scanner.nextInt();
 
-    void display() {
-        System.out.println("Ваше имя: " + name);
-        System.out.println("Ваша дата рождения: " + birthDate);
-        LocalDate today = LocalDate.now();
-        int age = Period.between(birthDate, today).getYears();
-        if (age >= 18) {
-            System.out.println("Вам больше 18 лет. Всеравно ваш паспорт!");
-        } else {
-            System.out.println("Вам не больше 18 лет. Ваш паспорт!");
+            if (option == 1) {
+                System.out.println("Привет, ты успешно создан");
+            } else if (option == 2) {
+                System.out.print("Введите ваш год рождения (yyyy-MM-dd): ");
+                String dateInput = scanner.next();
+                LocalDate dateOfBirth = LocalDate.parse(dateInput, dateFormatter);
+                System.out.println("Ваша дата рождения: " + dateOfBirth.format(dateFormatter));
+            } else if (option == 3) {
+                System.out.println("Введите ваш год рождения, для проверки (yyyy-MM-dd): ");
+                String dateInput = scanner.next();
+                LocalDate dateOfBirth = LocalDate.parse(dateInput, dateFormatter);
+                long age = ChronoUnit.YEARS.between(dateOfBirth, LocalDate.now());
+                if (age < 18) {
+                    System.out.println("Доступ запрещен :(");
+                } else {
+                    System.out.println("Доступ разрешен :) ");
+                }
+            } else if (option == 4) {
+                System.out.println("Пока");
+                break;
+            } else {
+                System.out.println("Неверный запрос");
+            }
         }
+
+        scanner.close();
     }
 }
